@@ -2,6 +2,7 @@ package io.github.davitsjunior.service.impl;
 
 import io.github.davitsjunior.domain.entity.Usuario;
 import io.github.davitsjunior.domain.repository.UsuarioRepository;
+import io.github.davitsjunior.exception.SenhaInvalidaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,6 +34,16 @@ public class UsuarioServiceImpl implements UserDetailsService {
                 .password(usuario.getSenha())
                 .roles(roles)
                 .build();
+    }
+
+    public  UserDetails autenticar( Usuario usuario){
+        UserDetails userDetails = loadUserByUsername(usuario.getLogin());
+        boolean senhasBatem = encoder.matches(usuario.getSenha(), userDetails.getPassword());
+
+        if(senhasBatem){
+            return userDetails;
+        }
+        throw new SenhaInvalidaException();
     }
 
     public Usuario salvar(Usuario usuario){
