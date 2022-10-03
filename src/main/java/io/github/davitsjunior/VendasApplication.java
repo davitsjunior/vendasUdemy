@@ -6,12 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class VendasApplication {
+public class VendasApplication extends SpringBootServletInitializer {
 
-    @Bean
+   /* @Bean
     public CommandLineRunner commandLineRunner (@Autowired Clientes clientes){
         return args -> {
             Cliente cliente = new Cliente();
@@ -23,7 +24,7 @@ public class VendasApplication {
             cliente1.setCpf("0220220210");
             clientes.save(cliente1);
         };
-    }
+    }*/
 
     public static void main(String[] args) {
         SpringApplication.run(VendasApplication.class, args);

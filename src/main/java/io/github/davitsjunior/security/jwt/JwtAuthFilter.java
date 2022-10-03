@@ -15,8 +15,8 @@ import java.io.IOException;
 
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    private JwtService jwtService;
-    private UsuarioServiceImpl usuarioService;
+    private final JwtService jwtService;
+    private final UsuarioServiceImpl usuarioService;
 
     public JwtAuthFilter(JwtService jwtService, UsuarioServiceImpl usuarioService) {
         this.jwtService = jwtService;
@@ -33,14 +33,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             boolean isValid = jwtService.tokenValido(token);
             if(isValid){
                 String loginUsuario = jwtService.obterLoginUsuario(token);
-                UserDetails usuaruo = usuarioService.loadUserByUsername(loginUsuario);
+                UserDetails usuario = usuarioService.loadUserByUsername(loginUsuario);
                 UsernamePasswordAuthenticationToken user = new
-                        UsernamePasswordAuthenticationToken(usuaruo, null, usuaruo.getAuthorities());
+                        UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
                 user.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(user);
             }
         }
         filterChain.doFilter(request, response);
     }
-
 }

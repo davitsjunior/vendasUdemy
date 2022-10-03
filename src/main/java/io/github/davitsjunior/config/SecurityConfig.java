@@ -8,7 +8,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -33,21 +35,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public OncePerRequestFilter jwtFilter(){
         return new JwtAuthFilter(jwtService, usuarioService);
     }
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
-
-
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//
+//
+//
 //        auth.inMemoryAuthentication()
 //                .passwordEncoder(passwordEncoder())
 //                .withUser("fulano")
 //                .password(passwordEncoder().encode("123"))
 //                .roles("USER", "ADMIN");
-
+//
 //        auth
 //            .userDetailsService(usuarioService)
 //            .passwordEncoder(passwordEncoder());
-    }
+//    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -70,5 +72,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class)
        ;
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers(
+                "/v2/api-docs",
+                "/configuration/ui",
+                "/swagger-resources/**",
+                "/configuration/security",
+                "/swagger-ui.html",
+                "/webjars/**");
     }
 }
